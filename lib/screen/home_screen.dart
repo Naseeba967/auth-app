@@ -1,3 +1,5 @@
+import 'package:developer_hub_authentication_app/screen/login_screen.dart';
+import 'package:developer_hub_authentication_app/services/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../models/task.dart';
 import '../services/task_service.dart';
@@ -14,7 +16,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
   List<Task> _tasks = [];
   bool _isLoading = true;
-
+ late final  FirebaseAuthService _firebaseAuthService;
   @override
   void initState() {
     super.initState();
@@ -28,6 +30,40 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       _isLoading = false;
     });
   }
+// inside your State class
+Future<void> _logout() async {
+  try {
+    await FirebaseAuthService().logout;
+
+    // if this State is unmounted after async, stop
+    if (!mounted) return;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("Signed out successfully"),
+        duration: Duration(seconds: 1),
+      ),
+    );
+
+    // remove all previous routes and go to LoginScreen
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (_) => LoginScreen()),
+      (route) => false,
+    );
+
+    // OR if you use named routes:
+    // Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+
+  } catch (e, st) {
+    // show error and log
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Sign out failed: ${e.toString()}")),
+    );
+    // optional: print or use logger
+    print('Sign out error: $e\n$st');
+  }
+}
 
   void _showAddTaskSheet() {
     final TextEditingController controller = TextEditingController();
@@ -308,7 +344,24 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               ),
               tooltip: 'Add Task',
             ),
-          ),
+          ), 
+            Padding(
+    padding: const EdgeInsets.only(right: 12),
+    child: IconButton(
+      onPressed: () => _logout(),
+      icon: Container(
+        padding: const EdgeInsets.all(6),
+        decoration: BoxDecoration(
+          color: Colors.white.withValues(alpha: 0.2),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: const Icon(Icons.logout_rounded, size: 22),
+      ),
+      tooltip: 'Sign Out',
+    ),
+  ),
+          
+          
         ],
       ),
       body: _isLoading

@@ -20,7 +20,7 @@ class CustomButton extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [AppColors.primaryBlue, Color(0xFF4B4ECC)],
+          colors: [ colorScheme.primary, Color(0xFF4B4ECC)],
         ),
         borderRadius: BorderRadius.circular(22),
         boxShadow: [

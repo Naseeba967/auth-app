@@ -1,4 +1,6 @@
+import 'package:developer_hub_authentication_app/screen/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 class FirebaseAuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -43,5 +45,8 @@ class FirebaseAuthService {
   // Logout
   Future<void> logout() async {
     await _auth.signOut();
+   
+
+      
   }
 }
