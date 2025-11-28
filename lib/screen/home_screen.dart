@@ -16,7 +16,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
   List<Task> _tasks = [];
   bool _isLoading = true;
- late final  FirebaseAuthService _firebaseAuthService;
+
   @override
   void initState() {
     super.initState();
